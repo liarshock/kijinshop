@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Login</title>
+</head>
+<body>
+    <!--ring div starts here-->
+    <div class="ring">
+        <i style="--clr:#00ff0a;"></i>
+        <i style="--clr:#ff0057;"></i>
+        <i style="--clr:#fffd44;"></i>
+        <div class="login">
+            <h2>Login</h2>
+            <div class="inputBx">
+                <input type="text" id="username" placeholder="Username" required>
+            </div>
+            <div class="inputBx">
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+            <div class="inputBx">
+                <input type="submit" id="loginBtn" value="Sign in">
+            </div>
+            <div class="links">
+                <a href="#">Forget Password</a>
+                <a href="#">Signup</a>
+            </div>
+        </div>
+    </div>
+    <!--ring div ends here-->
+
+    <script>
+        document.getElementById('loginBtn').addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            if (!username || !password) {
+                alert('Por favor ingresa un nombre de usuario y una contraseña.');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const data = await response.json();
+                if (response.status === 200) {
+                    alert(data.message);
+                    console.log(data.user);
+                    window.location.href = '/inicio';  
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.log('Error:', error);
+                alert('Error al intentar iniciar sesión');
+            }
+        });
+    </script>
+
+</body>
+</html>
